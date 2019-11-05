@@ -1,75 +1,94 @@
+
 package fr.unilim.iut.katatennis;
 
 public class TennisGame1 implements TennisGame {
 
-	private int mScore1 = 0;
-	private int mScore2 = 0;
+	private int scoreJoueur1 = 0;
+	private int scoreJoueur2 = 0;
 	private String player1Name;
+	private String player2Name;
 
-	public TennisGame1(String player1Name) {
+	public TennisGame1(String player1Name, String player2Name) {
 		this.player1Name = player1Name;
+		this.player2Name = player2Name;
 	}
 
 	public void wonPoint(String playerName) {
-		if (playerName == player1Name)
-			mScore1 += 1;
-		else
-			mScore2 += 1;
+		if (playerName.equals( this.player1Name))
+			scoreJoueur1 += 1;
+		if (playerName.equals( this.player2Name))
+			scoreJoueur2 += 1;
 	}
 
 	public String getScore() {
-		String score = "";
-		int tempScore = 0;
-		if (mScore1 == mScore2) {
-			switch (mScore1) {
+		StringBuilder score = new StringBuilder("");
+
+		if (scoreJoueur1 == scoreJoueur2) {
+			egalite(score);
+		} else if (scoreJoueur1 >= 4 || scoreJoueur2 >= 4) {
+			tieBreak(score);
+		} else {
+			scoreDifferent(score);
+		}
+		return score.toString();
+	}
+
+	private void scoreDifferent(StringBuilder score) {
+		int tempScore;
+		for (int i = 1; i < 3; i++) {
+			if (i == 1)
+				tempScore = scoreJoueur1;
+			else {
+				score.append("-");
+				tempScore = scoreJoueur2;
+			}
+			switch (tempScore) {
 			case 0:
-				score = "Love-All";
+				score.append("Love");
 				break;
 			case 1:
-				score = "Fifteen-All";
+				score.append("Fifteen");
 				break;
 			case 2:
-				score = "Thirty-All";
+				score.append("Thirty");
+				break;
+			case 3:
+				score.append("Forty");
 				break;
 			default:
-				score = "Deuce";
+				score.append("Love");
 				break;
-
-			}
-		} else if (mScore1 >= 4 || mScore2 >= 4) {
-			int minusResult = mScore1 - mScore2;
-			if (minusResult == 1)
-				score = "Advantage player1";
-			else if (minusResult == -1)
-				score = "Advantage player2";
-			else if (minusResult >= 2)
-				score = "Win for player1";
-			else
-				score = "Win for player2";
-		} else {
-			for (int i = 1; i < 3; i++) {
-				if (i == 1)
-					tempScore = mScore1;
-				else {
-					score += "-";
-					tempScore = mScore2;
-				}
-				switch (tempScore) {
-				case 0:
-					score += "Love";
-					break;
-				case 1:
-					score += "Fifteen";
-					break;
-				case 2:
-					score += "Thirty";
-					break;
-				case 3:
-					score += "Forty";
-					break;
-				}
 			}
 		}
-		return score;
+	}
+
+	private void egalite(StringBuilder score) {
+		switch (scoreJoueur1) {
+		case 0:
+			score.append("Love-All");
+			break;
+		case 1:
+			score.append("Fifteen-All");
+			break;
+		case 2:
+			score.append("Thirty-All");
+			break;
+		default:
+			score.append("Deuce");
+			break;
+
+		}
+	}
+
+	private void tieBreak(StringBuilder score) {
+		int minusResult = scoreJoueur1 - scoreJoueur2;
+		if (minusResult == 1)
+			score.append("Advantage player1");
+		else if (minusResult == -1)
+			score.append("Advantage player2");
+		else if (minusResult >= 2)
+			score.append("Win for player1");
+		else
+			score.append("Win for player2");
 	}
 }
