@@ -5,15 +5,13 @@ public class TennisGame1 implements TennisGame {
 	private int mScore1 = 0;
 	private int mScore2 = 0;
 	private String player1Name;
-	private String player2Name;
 
-	public TennisGame1(String player1Name, String player2Name) {
+	public TennisGame1(String player1Name) {
 		this.player1Name = player1Name;
-		this.player2Name = player2Name;
 	}
 
 	public void wonPoint(String playerName) {
-		if (playerName == "player1")
+		if (playerName == player1Name)
 			mScore1 += 1;
 		else
 			mScore2 += 1;
